@@ -181,15 +181,3 @@ public class RestfulBookerTest {
 
     }
 
-}
-/*TODO
-     1- Get Token+
-     2- CreateBooking+
-     3- CheckCreationBooking+
-     4- UpdateBooking+
-     5- CheckUpdateBooking+
-     6- DeleteBooking+
-     7- CheckDelete+
-
-
- */
