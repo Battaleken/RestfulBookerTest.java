@@ -28,13 +28,11 @@ public class RestfulBookerTest {
 
         checkCreateBooking(bookingId);
 
-        updateBooking(totalprice,bookingId);
+        updateBooking(totalprice, bookingId);
         checkUpdateBooking(bookingId);
 
         deleteBooking(bookingId);
         checkDeleteBooking(bookingId);
-
-
 
 
     }
@@ -42,19 +40,19 @@ public class RestfulBookerTest {
     public String getToken() throws IOException {
         URL file = Resources.getResource("token.json");
         String myJson = Resources.toString(file, Charset.defaultCharset());
-        JSONObject json = new JSONObject( myJson );
+        JSONObject json = new JSONObject(myJson);
 
         Response response =
 
-        given()
-                .contentType("application/json; charset=UTF-8")
-                .body(json.toString())
-        .when()
-                .post("/auth")
-        .then()
-                .statusCode(200)
-                .extract()
-                .response();
+                given()
+                        .contentType("application/json; charset=UTF-8")
+                        .body(json.toString())
+                        .when()
+                        .post("/auth")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .response();
 
 
         String token = response.getBody().jsonPath().getString("token");
@@ -66,24 +64,24 @@ public class RestfulBookerTest {
     public String createBooking(Long totalprice) throws IOException {
         URL file = Resources.getResource("bookingBody.json");
         String myJson = Resources.toString(file, Charset.defaultCharset());
-        JSONObject json = new JSONObject( myJson );
+        JSONObject json = new JSONObject(myJson);
 
         json.put("totalprice", totalprice);
         json.put("depositpaid", false);
-        json.getJSONObject("bookingdates").put("checkin" , "2000-11-11");
+        json.getJSONObject("bookingdates").put("checkin", "2000-11-11");
 
 
         Response bodyresponse =
 
-        given()
-                .contentType("application/json; charset=UTF-8")
-                .body(json.toString())
-        .when()
-                .post("/booking")
-        .then()
-                .statusCode(200)
-                .extract()
-                .response();
+                given()
+                        .contentType("application/json; charset=UTF-8")
+                        .body(json.toString())
+                        .when()
+                        .post("/booking")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .response();
 
         String bookingId = bodyresponse.getBody().jsonPath().getString("bookingid");
 //        String bookingId = js.get("bookingid").toString();
@@ -91,31 +89,28 @@ public class RestfulBookerTest {
         return bookingId;
 
 
-
-
-
-
     }
-    public void checkCreateBooking(String bookingId){
+
+    public void checkCreateBooking(String bookingId) {
         Response checkUpdate =
                 given()
                         .contentType("application/json; charset=UTF-8")
-                .when()
-                        .get("/booking/"+ bookingId)
-                .then()
+                        .when()
+                        .get("/booking/" + bookingId)
+                        .then()
                         .statusCode(200)
                         .extract()
                         .response();
-          checkUpdate.getBody().prettyPeek() ;
+        checkUpdate.getBody().prettyPeek();
 //        System.out.println("CREATEBOOKING: " + checkUpdate);
 
 
     }
 
-    public void updateBooking(long totalprice, String bookingId ) throws IOException {
+    public void updateBooking(long totalprice, String bookingId) throws IOException {
         URL file = Resources.getResource("bookingBody.json");
         String myJson = Resources.toString(file, Charset.defaultCharset());
-        JSONObject json = new JSONObject( myJson );
+        JSONObject json = new JSONObject(myJson);
 
         json.put("depositpaid", true);
         json.put("additionalneeds", "Sonaksamyemegi");
@@ -125,37 +120,35 @@ public class RestfulBookerTest {
                 given()
                         .contentType("application/json; charset=UTF-8")
                         .accept("application/json")
-                        .cookie("token" , getToken())
+                        .cookie("token", getToken())
 //                        .auth()
 //                        .preemptive()
 //                        .basic( "admin" , "password123")
                         .body(json.toString())
-                .when()
+                        .when()
                         .put("/booking/" + bookingId)
-                .then()
+                        .then()
                         .statusCode(200)
                         .extract()
                         .response();
 
-                bodyResponse.getBody().prettyPeek() ;
+        bodyResponse.getBody().prettyPeek();
 
     }
 
-    public void checkUpdateBooking(String bookingId ){
+    public void checkUpdateBooking(String bookingId) {
 
         Response checkUpdate =
                 given()
                         .contentType("application/json; charset=UTF-8")
-                .when()
-                        .get("/booking/"+ bookingId)
-                .then()
+                        .when()
+                        .get("/booking/" + bookingId)
+                        .then()
                         .statusCode(200)
                         .extract()
                         .response();
 
     }
-
-
 
 
     public void deleteBooking(String bookingId) throws IOException {
@@ -163,22 +156,22 @@ public class RestfulBookerTest {
         given()
                 .contentType("application/json; charset=UTF-8")
                 .cookie("token", getToken())
-        .when()
+                .when()
                 .delete("/booking/" + bookingId)
-        .then()
+                .then()
                 .statusCode(201);
 
 
-
     }
-    public void checkDeleteBooking(String bookingId){
+
+    public void checkDeleteBooking(String bookingId) {
         given()
                 .contentType("application/json; charset=UTF-8")
-        .when()
+                .when()
                 .get("/booking/" + bookingId)
-        .then()
+                .then()
                 .statusCode(404);
 
     }
-
 }
+
